@@ -2,7 +2,7 @@ ARG IMAGE_REPO="ghcr.io/cartermckinnon"
 
 proto-builder:
     # toolchain last updated: April 16, 2022.
-    FROM ubuntu:20.04
+    FROM ubuntu:21.04
     # Get rid of the warning: "debconf: unable to initialize frontend: Dialog"
     # https://github.com/moby/moby/issues/27988
     RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
@@ -48,7 +48,7 @@ builder:
     SAVE ARTIFACT /go/bin/filter-feed AS LOCAL bin/filter-feed
 
 filter-feed:
-    FROM ubuntu:20.04
+    FROM ubuntu:21.04
     LABEL org.opencontainers.image.source="https://github.com/cartermckinnon/filter-feed/"
     COPY +builder/filter-feed /usr/bin/filter-feed
     ENTRYPOINT ["/usr/bin/filter-feed"]
