@@ -2,7 +2,7 @@ ARG IMAGE_REPO="ghcr.io/cartermckinnon"
 
 proto-builder:
     # toolchain last updated: April 16, 2022.
-    FROM ubuntu:22.04
+    FROM ubuntu:20.04
     RUN apt-get update && apt-get install wget unzip golang git -y
     # https://github.com/protocolbuffers/protobuf/releases
     WORKDIR /tmp
@@ -45,7 +45,7 @@ builder:
     SAVE ARTIFACT /go/bin/filter-feed AS LOCAL bin/filter-feed
 
 filter-feed:
-    FROM ubuntu
+    FROM ubuntu:20.04
     COPY +builder/filter-feed /usr/bin/filter-feed
     ENTRYPOINT ["/usr/bin/filter-feed"]
     CMD ["server"]
