@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option go_package = "pkg/api/v1";
+
+package filterfeed;
+
+service FilterFeed {
+  rpc FetchFeed (FetchFeedRequest) returns (FetchFeedResponse) {}
+}
+
+message FilterSpecs {
+  repeated FilterSpec specs = 1;
+}
+
+message FilterSpec {
+  string type = 1;
+  string expression = 2;
+  string target = 3;
+  FilterEffect effect = 4;
+}
+
+enum FilterEffect {
+  INCLUDE = 0;
+  EXCLUDE = 1;
+}
+
+message FetchFeedRequest {
+  string feedUrl = 1;
+  repeated FilterSpec filters = 2;
+}
+
+message FetchFeedResponse {
+  string content = 1;
+}
