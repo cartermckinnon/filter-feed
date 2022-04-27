@@ -18,5 +18,5 @@ jobs:
       - run:
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{
           github.repository_owner }} --password-stdin
-      - run: earthly --push +filter-feed
-      - run: earthly --push +filter-feed --VERSION=latest
+      - run: earthly --push --use-inline-cache --save-inline-cache +filter-feed
+      - run: earthly --push --use-inline-cache +filter-feed --VERSION=latest
