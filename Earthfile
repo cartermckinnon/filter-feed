@@ -36,14 +36,14 @@ proto:
         *.proto
     # disable eslint on generated JS files (https://github.com/grpc/grpc-web/issues/447)
     RUN find js/ -type f -exec sh -c "echo '/* eslint-disable */' | cat - {} > /tmp/out && mv /tmp/out {}" \;
-    SAVE ARTIFACT go/pkg/api/v* /go/ AS LOCAL pkg/api/
-    SAVE ARTIFACT js/* /js/ AS LOCAL ui/src/api/
+    SAVE ARTIFACT go/pkg/api/ /go AS LOCAL pkg/api
+    SAVE ARTIFACT js/ /js AS LOCAL ui/src/api
 
 builder:
     FROM golang
     WORKDIR /go/src/github.com/cartermckinnon/filter-feed
     COPY . .
-    COPY +proto/go/v* pkg/api/
+    COPY +proto/go pkg/api
     RUN go build -o /go/bin/filter-feed
     SAVE ARTIFACT /go/bin/filter-feed AS LOCAL bin/filter-feed
 
