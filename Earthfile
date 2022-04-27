@@ -1,4 +1,4 @@
-ARG IMAGE_REPO="ghcr.io/cmckn"
+ARG IMAGE_REPO="ghcr.io/cartermckinnon"
 
 proto-builder:
     # toolchain last updated: April 16, 2022.
@@ -40,7 +40,7 @@ builder:
     FROM golang
     WORKDIR /go/src/github.com/cmckn/filter-feed
     COPY . .
-    RUN go get
+    COPY +proto/go/v* pkg/api/
     RUN go build -o /go/bin/filter-feed
     SAVE ARTIFACT /go/bin/filter-feed AS LOCAL bin/filter-feed
 
