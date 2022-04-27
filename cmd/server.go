@@ -4,8 +4,8 @@ import (
 	"log"
 	"net"
 
-	"github.com/cmckn/filter-feed/pkg/fetch"
-	"github.com/cmckn/filter-feed/pkg/service"
+	"github.com/cartermckinnon/filter-feed/pkg/fetch"
+	"github.com/cartermckinnon/filter-feed/pkg/service"
 	"github.com/integrii/flaggy"
 	"google.golang.org/grpc"
 )

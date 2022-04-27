@@ -1,4 +1,4 @@
-module github.com/cmckn/filter-feed
+module github.com/cartermckinnon/filter-feed
 
 go 1.16
 

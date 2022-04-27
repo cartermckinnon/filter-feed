@@ -41,7 +41,7 @@ proto:
 
 builder:
     FROM golang
-    WORKDIR /go/src/github.com/cmckn/filter-feed
+    WORKDIR /go/src/github.com/cartermckinnon/filter-feed
     COPY . .
     COPY +proto/go/v* pkg/api/
     RUN go build -o /go/bin/filter-feed

@@ -3,7 +3,7 @@ package filter
 import (
 	"log"
 
-	api "github.com/cmckn/filter-feed/pkg/api/v1"
+	api "github.com/cartermckinnon/filter-feed/pkg/api/v1"
 	"github.com/mmcdole/gofeed"
 )
 

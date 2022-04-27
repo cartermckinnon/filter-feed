@@ -3,7 +3,7 @@ package main
 import (
 	stdlog "log"
 
-	"github.com/cmckn/filter-feed/cmd"
+	"github.com/cartermckinnon/filter-feed/cmd"
 	"github.com/integrii/flaggy"
 )
 

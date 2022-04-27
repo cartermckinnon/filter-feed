@@ -4,10 +4,10 @@ import (
 	"context"
 	"log"
 
-	api "github.com/cmckn/filter-feed/pkg/api/v1"
-	"github.com/cmckn/filter-feed/pkg/fetch"
-	"github.com/cmckn/filter-feed/pkg/filter"
-	"github.com/cmckn/filter-feed/pkg/util"
+	api "github.com/cartermckinnon/filter-feed/pkg/api/v1"
+	"github.com/cartermckinnon/filter-feed/pkg/fetch"
+	"github.com/cartermckinnon/filter-feed/pkg/filter"
+	"github.com/cartermckinnon/filter-feed/pkg/util"
 	"google.golang.org/grpc"
 )
 

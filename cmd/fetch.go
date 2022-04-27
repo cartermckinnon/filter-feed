@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	api "github.com/cmckn/filter-feed/pkg/api/v1"
+	api "github.com/cartermckinnon/filter-feed/pkg/api/v1"
 	"github.com/integrii/flaggy"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
