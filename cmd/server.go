@@ -1,13 +1,9 @@
 package cmd
 
 import (
-	"log"
-	"net"
-
 	"github.com/cartermckinnon/filter-feed/pkg/fetch"
 	"github.com/cartermckinnon/filter-feed/pkg/service"
 	"github.com/integrii/flaggy"
-	"google.golang.org/grpc"
 )
 
 type command struct {
@@ -33,21 +29,5 @@ func (c *command) GetFlaggySubcommand() *flaggy.Subcommand {
 }
 
 func (c *command) Run() error {
-
-	addr := *c.address
-	lis, err := net.Listen("tcp", addr)
-	if err != nil {
-		log.Printf("failed to listen on address=%s", addr)
-		return err
-	}
-	log.Printf("server listening on address=%s", lis.Addr())
-
-	grpc := grpc.NewServer()
-	service.RegisterFilterFeedServer(grpc, fetch.NewFeedFetcher())
-
-	if err := grpc.Serve(lis); err != nil {
-		return err
-	}
-
-	return nil
+	return service.RunHTTPService(*c.address, fetch.NewFeedFetcher())
 }

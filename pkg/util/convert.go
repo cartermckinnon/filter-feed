@@ -25,7 +25,12 @@ func convertToGorillaFeed(feed *gofeed.Feed) *feeds.Feed {
 		Title:       feed.Title,
 		Link:        &feeds.Link{Href: feed.Link},
 		Description: feed.Description,
-		Author:      &feeds.Author{Name: feed.Author.Name, Email: feed.Author.Email},
+	}
+	if feed.Author != nil {
+		author := feeds.Author{}
+		author.Name = feed.Author.Name
+		author.Email = feed.Author.Email
+		gfeed.Author = &author
 	}
 
 	var items []*feeds.Item
@@ -34,8 +39,10 @@ func convertToGorillaFeed(feed *gofeed.Feed) *feeds.Feed {
 			Title:       item.Title,
 			Link:        &feeds.Link{Href: item.Link},
 			Description: item.Description,
-			Author:      &feeds.Author{Name: item.Author.Name, Email: item.Author.Email},
 			Created:     *item.PublishedParsed,
+		}
+		if item.Author != nil {
+			gitem.Author = &feeds.Author{Name: item.Author.Name, Email: item.Author.Email}
 		}
 		if len(item.Enclosures) > 0 {
 			e := item.Enclosures[0]

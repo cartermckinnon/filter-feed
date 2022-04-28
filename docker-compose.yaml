@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - conf:/etc/nginx/conf.d
+      - vhost:/etc/nginx/vhost.d
+      - dhparam:/etc/nginx/dhparam
+      - certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /usr/share/nginx/html
+    restart: always
+
+  letsencrypt:
+    image: nginxproxy/acme-companion
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - certs:/etc/nginx/certs:rw
+      - acme:/etc/acme.sh:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: always
+    environment:
+      - DEFAULT_EMAIL=admin@filter-feed.me
+
+  filter-feed:
+    image: ghcr.io/cartermckinnon/filter-feed:latest
+    expose:
+      - "8080"
+    environment:
+      - VIRTUAL_HOST=api.filter-feed.me
+      - VIRTUAL_PORT=8080
+      - LETSENCRYPT_HOST=api.filter-feed.me
+
+volumes:
+  conf:
+  vhost:
+  dhparam:
+  certs:
+  acme:

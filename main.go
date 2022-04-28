@@ -17,6 +17,7 @@ func main() {
 	var subcommands []cmd.Command
 	subcommands = append(subcommands, cmd.NewServerCommand())
 	subcommands = append(subcommands, cmd.NewFetchCommand())
+	subcommands = append(subcommands, cmd.NewURLCommand())
 	for _, subcommand := range subcommands {
 		flaggy.AttachSubcommand(subcommand.GetFlaggySubcommand(), 1) // flaggy positions start at 1
 	}

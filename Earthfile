@@ -12,14 +12,8 @@ proto-builder:
     RUN wget -O protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v3.20.0/protoc-3.20.0-linux-x86_64.zip && \
         unzip protoc.zip -d /protoc
     ENV PATH=$PATH:/protoc/bin
-    # https://github.com/grpc/grpc-web/releases
-    RUN wget -O protoc-gen-grpc-web https://github.com/grpc/grpc-web/releases/download/1.3.1/protoc-gen-grpc-web-1.3.1-linux-x86_64 && \
-        chmod +x protoc-gen-grpc-web && \
-        mv protoc-gen-grpc-web /protoc/bin/
     # https://pkg.go.dev/google.golang.org/protobuf/cmd/protoc-gen-go?tab=versions
     RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.0
-    # https://pkg.go.dev/google.golang.org/grpc/cmd/protoc-gen-go-grpc?tab=versions    
-    RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2.0
     ENV PATH=$PATH:/root/go/bin
     SAVE IMAGE --push $IMAGE_REPO/filter-feed/proto-builder:earthly-cache
 
@@ -31,8 +25,7 @@ proto:
     RUN /protoc/bin/protoc \
         -I=/proto \
         --go_out=go/ \
-        --grpc-web_out=import_style=commonjs,mode=grpcwebtext:js/ \
-        --go-grpc_out=go/ \
+        --js_out=import_style=commonjs:js/ \
         *.proto
     # disable eslint on generated JS files (https://github.com/grpc/grpc-web/issues/447)
     RUN find js/ -type f -exec sh -c "echo '/* eslint-disable */' | cat - {} > /tmp/out && mv /tmp/out {}" \;

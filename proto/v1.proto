@@ -4,10 +4,6 @@ option go_package = "pkg/api/v1";
 
 package filterfeed;
 
-service FilterFeed {
-  rpc FetchFeed (FetchFeedRequest) returns (FetchFeedResponse) {}
-}
-
 message FilterSpecs {
   repeated FilterSpec specs = 1;
 }
@@ -25,7 +21,7 @@ enum FilterEffect {
 }
 
 message FetchFeedRequest {
-  string feedUrl = 1;
+  string feedURL = 1;
   repeated FilterSpec filters = 2;
 }
 
