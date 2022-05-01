@@ -20,3 +20,6 @@ jobs:
           github.repository_owner }} --password-stdin
       - run: earthly --push --use-inline-cache --save-inline-cache +filter-feed
       - run: earthly --push --use-inline-cache +filter-feed --VERSION=latest
+      - run: earthly --push --use-inline-cache --save-inline-cache +ui
+      - run: earthly --push --use-inline-cache +ui --VERSION=latest
+
