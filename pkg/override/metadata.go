@@ -10,7 +10,7 @@ type metadataOverride struct {
 }
 
 func (mo *metadataOverride) Apply(feed *gofeed.Feed) bool {
-	switch mo.spec.Target {
+	switch mo.spec.Target[len("metadata."):] {
 	case "title":
 		if feed.Title != mo.spec.Value {
 			feed.Title = mo.spec.Value

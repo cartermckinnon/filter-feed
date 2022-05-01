@@ -26,7 +26,7 @@ func NewFeedFetcher(redisConfig *config.RedisConfig) FeedFetcher {
 		parser: gofeed.NewParser(),
 	}
 	if *redisConfig.Enabled {
-		log.Printf("using redis=%s for feed caching", *redisConfig.Address)
+		log.Printf("using redis at address=%s for feed caching", *redisConfig.Address)
 		ff.redis = redis.NewClient(&redis.Options{
 			Addr:     *redisConfig.Address,
 			DB:       *redisConfig.DB,
