@@ -33,3 +33,29 @@ func unmarshalFilters(filter string) ([]*api.FilterSpec, error) {
 	}
 	return nil, nil
 }
+
+// unmarshalOverrides returns overrides converted from a JSON string or the contents of a JSON file.
+func unmarshalOverrides(override string) ([]*api.OverrideSpec, error) {
+	if strings.HasPrefix(override, "file://") {
+		bytes, err := ioutil.ReadFile(override[7:])
+		if err != nil {
+			return nil, err
+		}
+		override = string(bytes)
+	}
+	if strings.HasPrefix(override, "{") {
+		var o api.OverrideSpec
+		if err := protojson.Unmarshal([]byte(override), &o); err != nil {
+			return nil, err
+		}
+		return []*api.OverrideSpec{&o}, nil
+	}
+	if strings.HasPrefix(override, "[") {
+		var os api.OverrideSpecs
+		if err := protojson.Unmarshal([]byte(override), &os); err != nil {
+			return nil, err
+		}
+		return os.Specs, nil
+	}
+	return nil, nil
+}

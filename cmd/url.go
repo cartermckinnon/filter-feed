@@ -12,10 +12,11 @@ import (
 )
 
 type urlCommand struct {
-	flaggyCmd     *flaggy.Subcommand
-	feedUrl       *string
-	filterVersion *uint
-	filter        *string
+	flaggyCmd  *flaggy.Subcommand
+	feedUrl    *string
+	apiVersion *uint
+	filter     *string
+	override   *string
 }
 
 func NewURLCommand() Command {
@@ -28,14 +29,18 @@ func NewURLCommand() Command {
 	var filter string
 	subcommand.AddPositionalValue(&filter, "FILTER", 2, true, "Filter to apply to the feed. Can be a JSON string or a file path.")
 
-	var filterVersion uint = 1
-	subcommand.UInt(&filterVersion, "v", "filter-version", "API version of the provided filter.")
+	var apiVersion uint = 1
+	subcommand.UInt(&apiVersion, "a", "api-version", "API version.")
+
+	var override string
+	subcommand.AddPositionalValue(&override, "OVERRIDE", 3, false, "Override to apply to the feed. Can be a JSON string or a file path.")
 
 	return &urlCommand{
-		flaggyCmd:     subcommand,
-		feedUrl:       &feedUrl,
-		filter:        &filter,
-		filterVersion: &filterVersion,
+		flaggyCmd:  subcommand,
+		feedUrl:    &feedUrl,
+		filter:     &filter,
+		apiVersion: &apiVersion,
+		override:   &override,
 	}
 }
 
@@ -48,9 +53,14 @@ func (c *urlCommand) Run() error {
 	if err != nil {
 		log.Fatalf("failed to unmarshal filter=%s, %v", *c.filter, err)
 	}
+	overrides, err := unmarshalOverrides(*c.override)
+	if err != nil {
+		log.Fatalf("failed to unmarshal overrides=%s, %v", *c.override, err)
+	}
 	request := api.FetchFeedRequest{
-		FeedURL: *c.feedUrl,
-		Filters: filters,
+		FeedURL:   *c.feedUrl,
+		Filters:   filters,
+		Overrides: overrides,
 	}
 	bytes, err := proto.Marshal(&request)
 	if err != nil {

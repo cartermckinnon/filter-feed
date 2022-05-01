@@ -27,8 +27,17 @@ services:
     environment:
       - DEFAULT_EMAIL=admin@filter-feed.me
 
+  redis:
+    image: redis
+    restart: always
+    expose:
+      - "6379"
+
   filter-feed:
     image: ghcr.io/cartermckinnon/filter-feed:latest
+    command: filter-feed server --redis-address=redis:6379
+    depends_on:
+      - redis
     expose:
       - "8080"
     environment:

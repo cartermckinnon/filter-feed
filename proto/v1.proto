@@ -20,9 +20,19 @@ enum FilterEffect {
   EXCLUDE = 1;
 }
 
+message OverrideSpec {
+  string target = 1;
+  string value = 2;
+}
+
 message FetchFeedRequest {
   string feedURL = 1;
   repeated FilterSpec filters = 2;
+  repeated OverrideSpec overrides = 3;
+}
+
+message OverrideSpecs {
+  repeated OverrideSpec specs = 1;
 }
 
 message FetchFeedResponse {

@@ -8,6 +8,7 @@ import (
 	api "github.com/cartermckinnon/filter-feed/pkg/api/v1"
 	"github.com/cartermckinnon/filter-feed/pkg/fetch"
 	"github.com/cartermckinnon/filter-feed/pkg/filter"
+	"github.com/cartermckinnon/filter-feed/pkg/override"
 	"github.com/cartermckinnon/filter-feed/pkg/util"
 	"google.golang.org/protobuf/proto"
 )
@@ -59,6 +60,13 @@ func (h *filterFeedV1Handler) filterFeedV1(w http.ResponseWriter, req *http.Requ
 		return
 	}
 	feed.Items = items
+
+	err = override.ApplyOverrides(feed, ffr.Overrides)
+	if err != nil {
+		log.Printf("error applying overrides %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 	content, err := util.ConvertFeedToString(feed)
 	if err != nil {
