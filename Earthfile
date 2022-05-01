@@ -62,13 +62,13 @@ ui-builder:
     RUN npm run build && \
         mkdir -p build/css/ && \
         cp src/css/* build/css/
-    SAVE ARTIFACT /workdir/build/* /ui/
-    SAVE IMAGE --push $IMAGE_REPO/filter-feed/ui-builder:cache
+    SAVE ARTIFACT /workdir/build /ui
+    SAVE IMAGE --push $IMAGE_REPO/filter-feed/ui-builder:earthly-cache
 
 ui:
     FROM nginx:stable
     LABEL org.opencontainers.image.source="https://github.com/cartermckinnon/filter-feed"
-    COPY +ui-builder/ui/* /var/www/
+    COPY +ui-builder/ui /var/www
     COPY ui/nginx.conf /etc/nginx/conf.d/default.conf
     CMD ["nginx","-g","daemon off;"]
     ARG VERSION="latest"
