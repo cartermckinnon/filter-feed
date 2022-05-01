@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/cartermckinnon/filter-feed/pkg/config"
 	"github.com/cartermckinnon/filter-feed/pkg/fetch"
 	"github.com/cartermckinnon/filter-feed/pkg/filter"
 	"github.com/cartermckinnon/filter-feed/pkg/util"
@@ -31,7 +32,7 @@ func NewFetchCommand() Command {
 		flaggyCmd: subcommand,
 		feedUrl:   &feedUrl,
 		filter:    &filter,
-		fetcher:   fetch.NewFeedFetcher(),
+		fetcher:   fetch.NewFeedFetcher(&config.RedisConfig{Enabled: util.NewFalse()}),
 	}
 }
 
