@@ -60,7 +60,7 @@ function createURL() {
   if (window.location.hostname !== "localhost") {
     host = "api." + host;
   }
-  return location.protocol + "://" + host + "/v1/f/" + b64;
+  return location.protocol + "//" + host + "/v1/f/" + b64;
 }
 
 function getRequestAsBase64() {
