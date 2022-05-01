@@ -1,0 +1,19 @@
+.icon-button {
+  margin-right: 10pt;
+}
+
+.input-field .postfix ~ input {
+  width: 80%;
+  width: calc(100% - 3rem);
+  margin-left: 0px;
+  margin-right: 3rem !important;
+}
+.input-field .postfix {
+  position: absolute;
+  right: 0px;
+  -webkit-transition: color 0.2s;
+  transition: color 0.2s;
+}
+.input-field .postfix.active {
+  color: #1976d2;
+}

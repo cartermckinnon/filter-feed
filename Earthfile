@@ -49,3 +49,27 @@ filter-feed:
     CMD ["server"]
     ARG VERSION="0.0.0-dev"
     SAVE IMAGE --push $IMAGE_REPO/filter-feed:$VERSION
+
+ui-builder:
+    FROM node:lts
+    WORKDIR /workdir
+    COPY ui/package.json .
+    COPY ui/package-lock.json .
+    COPY ui/webpack.config.js .
+    RUN npm install
+    COPY ui/src src/
+    COPY +proto/js src/api
+    RUN npm run build && \
+        mkdir -p build/css/ && \
+        cp src/css/* build/css/
+    SAVE ARTIFACT /workdir/build/* /ui/
+    SAVE IMAGE --push $IMAGE_REPO/filter-feed/ui-builder:cache
+
+ui:
+    FROM nginx:stable
+    LABEL org.opencontainers.image.source="https://github.com/cartermckinnon/filter-feed"
+    COPY +ui-builder/ui/* /var/www/
+    COPY ui/nginx.conf /etc/nginx/conf.d/default.conf
+    CMD ["nginx","-g","daemon off;"]
+    ARG VERSION="latest"
+    SAVE IMAGE --push $IMAGE_REPO/filter-feed/ui:$VERSION

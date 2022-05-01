@@ -45,6 +45,15 @@ services:
       - VIRTUAL_PORT=8080
       - LETSENCRYPT_HOST=api.filter-feed.me
 
+  ui:
+    image: ghcr.io/cartermckinnon/filter-feed/ui:latest
+    expose:
+      - "80"
+    environment:
+      - VIRTUAL_HOST=filter-feed.me
+      - VIRTUAL_PORT=80
+      - LETSENCRYPT_HOST=filter-feed.me
+
 volumes:
   conf:
   vhost:

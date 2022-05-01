@@ -1,0 +1,24 @@
+{
+  "name": "ui",
+  "version": "0.0.0",
+  "description": "UI for filter-feed url.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --watch",
+    "start": "webpack serve --open",
+    "build": "webpack"
+  },
+  "author": "Carter McKinnon",
+  "license": "ISC",
+  "devDependencies": {
+    "html-webpack-plugin": "5.3.2",
+    "webpack": "5.53.0",
+    "webpack-cli": "4.9.2",
+    "webpack-dev-server": "4.2.1"
+  },
+  "dependencies": {
+    "google-protobuf": "3.20.1",
+    "lodash": "4.17.21"
+  }
+}
