@@ -19,10 +19,10 @@ export class URLCard {
         this.element = div;
         div.classList.add('card');
 
-        let header = new URLCardHeader(url, "-");
+        let header = new URLCardHeader(request.getFeedurl(), "-");
         this.header = header;
+        header.setFilteredURL(createFilteredURL(request));
         div.appendChild(header.getElement());
-
 
         div.appendChild(this.createFilterSection(request));
 
@@ -33,7 +33,6 @@ export class URLCard {
     }
 
     onRequestChange(request) {
-        console.log("request changed");
         this.request = request;
         this.header.setFilteredURL(createFilteredURL(request));
     }
@@ -59,7 +58,6 @@ export class URLCard {
 const FETCH_FEED_PATH = "/v1/ff/";
 
 function createFilteredURL(request) {
-    console.log(request);
     if (request.getFiltersList().length == 0) {
         return "-";
     }
@@ -78,12 +76,22 @@ function toBase64(dataArr) {
     }, ''));
 }
 
+function base64StringToUint8Array(base64String) {
+    let binaryString = atob(base64String);
+    let len = binaryString.length;
+    let bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
+
 function parseRequestFromURL(urlString) {
     let url = new URL(urlString);
     if (url.hostname.endsWith(window.location.hostname)) {
-        let path = url.pathname.substring(FETCH_FEED_PATH.length);
-        let bytes = atob(path);
-        let request = FilterRequest.deserializeBinary(bytes);
+        let b64 = url.pathname.substring(FETCH_FEED_PATH.length);
+        let bytes = base64StringToUint8Array(b64);
+        let request = FetchFeedRequest.deserializeBinary(bytes);
         return request;
     }
     return null;
@@ -133,7 +141,6 @@ class URLCardHeader {
     }
 
     setFilteredURL(url) {
-        console.log(url);
         this.filteredURLSpan.innerText = url;
     }
 
