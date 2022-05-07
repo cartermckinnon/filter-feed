@@ -1,7 +1,11 @@
-const { FetchFeedRequest } = require('./api/v1_pb.js');
+const { FetchFeedRequest, FilterType, FilterTarget, FilterEffect } = require('./api/v1_pb.js');
 const { Materialize } = require('./materialize.min.js');
+const { URLCard } = require('./url_card.js');
+const regexColorizer = require('regex-colorizer');
 
 var feedURLInput = null;
+
+const CREATE_URL_CARD_BUTTON = "create-url-card-button";
 
 function checkFeedURL() {
   const value = feedURLInput.value;
@@ -35,14 +39,14 @@ function invalidFeedURL() {
 }
 
 function disableCreateButton() {
-  const button = document.getElementById("create-url-button");
+  const button = document.getElementById(CREATE_URL_CARD_BUTTON);
   if (button != null) {
     button.classList.add('disabled');
   }
 }
 
 function enableCreateButton() {
-  const button = document.getElementById("create-url-button");
+  const button = document.getElementById(CREATE_URL_CARD_BUTTON);
   if (button != null) {
     button.classList.remove('disabled');
   }
@@ -54,28 +58,6 @@ function validFeedURL() {
   enableCreateButton();
 }
 
-function createURL() {
-  b64 = getRequestAsBase64();
-  host = window.location.host;
-  if (window.location.hostname !== "localhost") {
-    host = "api." + host;
-  }
-  return location.protocol + "//" + host + "/v1/f/" + b64;
-}
-
-function getRequestAsBase64() {
-  let url = feedURLInput.value;
-  let request = new FetchFeedRequest();
-  request.setFeedurl(url);
-  bytes = request.serializeBinary();
-  return toBase64(bytes);
-}
-
-function toBase64(dataArr) {
-  return btoa(dataArr.reduce((data, val) => {
-    return data + String.fromCharCode(val);
-  }, ''));
-}
 
 function displayURL(url) {
   const elem = document.querySelector("#url-container");
@@ -84,6 +66,15 @@ function displayURL(url) {
   card.classList.add("card");
   const cardContent = document.createElement('div');
   cardContent.classList.add('card-content');
+
+  const row = document.createElement('div');
+  row.classList.add('row');
+  const colA = document.createElement('div');
+  colA.classList.add('col');
+  colA.classList.add('s1');
+  const colB = document.createElement('div');
+  colB.classList.add('col');
+  colB.classList.add('s11');
 
   const copyBtn = document.createElement('a');
   copyBtn.id = "url-copy-icon";
@@ -105,13 +96,15 @@ function displayURL(url) {
   copyIcon.classList.add('material-icons');
   copyIcon.innerText = "content_copy";
   copyBtn.appendChild(copyIcon);
-  cardContent.appendChild(copyBtn);
+  colA.appendChild(copyBtn);
 
   const urlText = document.createElement('pre');
-  urlText.append(copyBtn);
   urlText.append(url);
-  cardContent.appendChild(urlText);
+  colB.appendChild(urlText);
 
+  row.appendChild(colA);
+  row.appendChild(colB);
+  cardContent.appendChild(row);
   card.appendChild(cardContent);
 
   elem.appendChild(card);
@@ -154,14 +147,22 @@ function copyTextToClipboard(text) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  document.querySelector('#create-url-button').onclick = function () {
+  document.querySelector('#' + CREATE_URL_CARD_BUTTON).onclick = function () {
     console.log("Create button clicked");
-    let url = createURL();
-    displayURL(url);
+    let url = document.querySelector('#feed_url').value;
+    let urlCard = new URLCard(url);
+    container = document.querySelector("#url-container");
+    container.innerHTML = "";
+    container.appendChild(urlCard.element);
   };
   const elem = document.querySelector('#feed_url');
   elem.onblur = function () {
     checkFeedURL();
   };
   feedURLInput = elem;
+
+  let elems = document.querySelectorAll('select');
+  M.FormSelect.init(elems);
+
+  regexColorizer.addStyleSheet();
 });

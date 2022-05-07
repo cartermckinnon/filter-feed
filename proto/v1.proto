@@ -20,6 +20,15 @@ enum FilterEffect {
   EXCLUDE = 1;
 }
 
+enum FilterType {
+  REGEX = 0;
+}
+
+enum FilterTarget {
+  TITLE = 0;
+  DESCRIPTION = 1;
+}
+
 message OverrideSpec {
   string target = 1;
   string value = 2;

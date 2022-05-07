@@ -2,18 +2,56 @@
   margin-right: 10pt;
 }
 
-.input-field .postfix ~ input {
+.input-field .postfix~input {
   width: 80%;
   width: calc(100% - 3rem);
   margin-left: 0px;
   margin-right: 3rem !important;
 }
+
 .input-field .postfix {
   position: absolute;
   right: 0px;
   -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
+
 .input-field .postfix.active {
   color: #1976d2;
+}
+
+span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  white-space: nowrap;
+}
+
+.card-content .row {
+  margin-bottom: 0;
+}
+
+.table-footer-row {
+  border: none;
+}
+
+.no-bottom-space {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+#url-card-content {
+  padding-top: 0;
+}
+
+.card-row {
+  border-top: 1px solid #e0e0e0;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.code-text {
+  font-family: monospace;
+  font-size: 12pt;
+  color: #757575;
 }

@@ -36,22 +36,20 @@
                 </div>
                 <div class="col s12 m6">
                     <div class="card">
-                        <div class="card-content">
-                            <div class="row" style="margin-bottom: 0;">
+                        <div id="url-card-content" class="card-content">
+                            <div class="row">
                                 <form class="col s12">
-                                    <div class="input-field">
+                                    <div class="input-field no-bottom-space">
                                         <i class="material-icons prefix">link</i>
-                                        <input id="feed_url" type="url" class="validate">
-                                        <label for="feed_url">URL</label>
+                                        <input placeholder="URL" id="feed_url" type="url" class="validate">
                                         <span id="helper-text" class="helper-text" data-error="That's not a valid URL."
                                             data-success="Looks good!">The feed you
                                             want to filter.</span>
                                     </div>
                                     <br>
-                                    <button id="create-url-button"
-                                        class="btn waves-effect waves-light right disabled blue" type="button"
-                                        name="action">Create
-                                        URL</button>
+                                    <button id="create-url-card-button"
+                                        class="btn waves-effect waves-light disabled right blue" type="button"
+                                        name="action">Filter</button>
                                 </form>
                             </div>
                         </div>
@@ -59,9 +57,11 @@
                 </div>
             </div>
             <div class="row">
-                <div id="url-container" class="col s12"></div>
+                <div id="url-container" class="col s12">
+                </div>
             </div>
         </div>
+    </div>
 </body>
 
 </html>

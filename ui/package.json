@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "google-protobuf": "3.20.1",
-    "lodash": "4.17.21"
+    "lodash": "4.17.21",
+    "regex-colorizer": "^0.3.1"
   }
 }
