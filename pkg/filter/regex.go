@@ -2,7 +2,6 @@ package filter
 
 import (
 	"regexp"
-	"strings"
 
 	api "github.com/cartermckinnon/filter-feed/pkg/api/v1"
 	"github.com/mmcdole/gofeed"
@@ -25,11 +24,11 @@ func (f *regexFilter) GetSpec() *api.FilterSpec {
 	return f.spec
 }
 
-func getTargetValue(target string, item *gofeed.Item) string {
-	switch strings.ToLower(target) {
-	case "title":
+func getTargetValue(target api.FilterTarget, item *gofeed.Item) string {
+	switch target {
+	case api.FilterTarget_TITLE:
 		return item.Title
-	case "description":
+	case api.FilterTarget_DESCRIPTION:
 		return item.Description
 	}
 	return ""

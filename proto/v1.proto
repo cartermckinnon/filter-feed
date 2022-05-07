@@ -9,9 +9,9 @@ message FilterSpecs {
 }
 
 message FilterSpec {
-  string type = 1;
+  FilterType type = 1;
   string expression = 2;
-  string target = 3;
+  FilterTarget target = 3;
   FilterEffect effect = 4;
 }
 

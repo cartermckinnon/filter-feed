@@ -89,10 +89,6 @@ function parseRequestFromURL(urlString) {
     return null;
 }
 
-function getEnumValues(enumType) {
-    return Object.keys(enumType).filter(key => !isNaN(Number(MotifIntervention[key])));
-}
-
 class URLCardHeader {
     element;
     filteredURLSpan;

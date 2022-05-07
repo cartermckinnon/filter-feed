@@ -4,14 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
-	"strings"
 
 	api "github.com/cartermckinnon/filter-feed/pkg/api/v1"
 )
 
 func buildFilter(spec *api.FilterSpec) (Filter, error) {
-	switch strings.ToLower(spec.Type) {
-	case "regex":
+	switch spec.Type {
+	case api.FilterType_REGEX:
 		regex, err := regexp.Compile(spec.Expression)
 		if err != nil {
 			return nil, err
