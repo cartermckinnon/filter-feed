@@ -13,7 +13,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-const FilterFeedV1Path = "/v1/f/"
+const FilterFeedV1Path = "/v1/ff/"
 
 var noFilters = []byte("no filters provided")
 
