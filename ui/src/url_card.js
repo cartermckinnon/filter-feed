@@ -97,6 +97,10 @@ function parseRequestFromURL(urlString) {
     return null;
 }
 
+function getKeyForValue(obj, value) {
+    return Object.keys(obj).find(key => obj[key] === value);
+}
+
 class URLCardHeader {
     element;
     filteredURLSpan;
@@ -175,13 +179,8 @@ class FilterTable {
         let tbody = document.createElement('tbody');
         this.tableBody = tbody;
 
-        for (let filter of request.getFiltersList()) {
-            let filterRow = new FilterRow(
-                filter.getTarget(),
-                filter.getEffect(),
-                filter.getType(),
-                filter.getExpression(),
-                filter);
+        for (let spec of request.getFiltersList()) {
+            let filterRow = new FilterRow(spec);
             filterRow.setRemoveButtonCallback(() => this.callback_removeFilterRow(filterRow));
             tbody.appendChild(filterRow.getElement());
         }
@@ -242,7 +241,7 @@ class FilterRow {
     removeButton;
     spec;
 
-    constructor(target, effect, type, expression, spec) {
+    constructor(spec) {
         this.spec = spec;
 
         let tr = document.createElement('tr');
@@ -250,19 +249,20 @@ class FilterRow {
         tr.classList.add('filter-row');
 
         let targetCol = document.createElement('td');
-        targetCol.innerText = target;
+        targetCol.innerText = getKeyForValue(FilterTarget, spec.getTarget());
         tr.appendChild(targetCol);
 
         let effectCol = document.createElement('td');
-        effectCol.innerText = effect;
+        effectCol.innerText = getKeyForValue(FilterEffect, spec.getEffect());
         tr.appendChild(effectCol);
 
         let typeCol = document.createElement('td');
+        let type = getKeyForValue(FilterType, spec.getType());
         typeCol.innerText = type;
         tr.appendChild(typeCol);
 
         let expressionCol = document.createElement('td');
-        expressionCol.innerText = expression;
+        expressionCol.innerText = spec.getExpression();
         if (type == "REGEX") {
             expressionCol.classList.add('regex');
         }
@@ -377,12 +377,7 @@ class FilterTableFooter {
         spec.setType(FilterType[type]);
         spec.setExpression(expression);
 
-        return new FilterRow(
-            target,
-            effect,
-            type,
-            expression,
-            spec);
+        return new FilterRow(spec);
     }
 
     createSelectColumn(name, enumType) {
