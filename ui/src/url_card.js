@@ -29,7 +29,7 @@ export class URLCard {
         // this is a ridiculous hack to get the <select>-s rendered properly by Materialize
         setTimeout(() => {
             M.FormSelect.init(document.querySelectorAll('select'));
-        }, 250);
+        }, 100);
     }
 
     onRequestChange(request) {
@@ -175,6 +175,17 @@ class FilterTable {
         let tbody = document.createElement('tbody');
         this.tableBody = tbody;
 
+        for (let filter of request.getFiltersList()) {
+            let filterRow = new FilterRow(
+                filter.getTarget(),
+                filter.getEffect(),
+                filter.getType(),
+                filter.getExpression(),
+                filter);
+            filterRow.setRemoveButtonCallback(() => this.callback_removeFilterRow(filterRow));
+            tbody.appendChild(filterRow.getElement());
+        }
+
         let footer = new FilterTableFooter();
         this.footer = footer;
         footer.setAddButtonCallback(() => this.callback_addFilterRow());
@@ -216,8 +227,6 @@ class FilterTable {
         this.removeSpecFromRequest(spec);
         filterRow.remove();
     }
-
-
 
     getElement() {
         return this.table;
@@ -409,5 +418,4 @@ class FilterTableFooter {
     capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
     }
-
 }
