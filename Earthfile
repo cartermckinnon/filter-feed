@@ -42,7 +42,7 @@ builder:
     SAVE ARTIFACT /go/bin/filter-feed AS LOCAL bin/filter-feed
 
 filter-feed:
-    FROM ubuntu:21.04
+    FROM ubuntu:22.04
     RUN apt-get update && apt-get install -y ca-certificates
     LABEL org.opencontainers.image.source="https://github.com/cartermckinnon/filter-feed/"
     COPY +builder/filter-feed /usr/bin/filter-feed
