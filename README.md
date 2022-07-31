@@ -28,7 +28,7 @@ Where:
 - `URL` is the URL for the feed.
 - `FILTER` is either:
   - A `FilterSpec`
-  - A `FilterSpec`
+  - A `FilterSpecs`
   - A path to a JSON file beginning with `file://` (ex. `file://my-filter.json`), that contains a `FilterSpec` or `FilterSpecs`.
 - (Optional) `OVERRIDE` is either:
   - A `OverrideSpec`
