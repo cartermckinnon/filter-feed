@@ -5,31 +5,31 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
-type metadataOverride struct {
+type overrideImpl struct {
 	spec *api.OverrideSpec
 }
 
-func (mo *metadataOverride) Apply(feed *gofeed.Feed) bool {
-	switch mo.spec.Target[len("metadata."):] {
-	case "title":
+func (mo *overrideImpl) Apply(feed *gofeed.Feed) bool {
+	switch mo.spec.Target {
+	case api.OverrideSpec_TITLE:
 		if feed.Title != mo.spec.Value {
 			feed.Title = mo.spec.Value
 			return true
 		}
-	case "description":
-		if feed.Description != mo.spec.Value {
-			feed.Description = mo.spec.Value
-			return true
-		}
-	case "subtitle":
+	case api.OverrideSpec_SUBTITLE:
 		if feed.ITunesExt.Subtitle != mo.spec.Value {
 			feed.ITunesExt.Subtitle = mo.spec.Value
+			return true
+		}
+	case api.OverrideSpec_DESCRIPTION:
+		if feed.Description != mo.spec.Value {
+			feed.Description = mo.spec.Value
 			return true
 		}
 	}
 	return false
 }
 
-func (f *metadataOverride) GetSpec() *api.OverrideSpec {
+func (f *overrideImpl) GetSpec() *api.OverrideSpec {
 	return f.spec
 }

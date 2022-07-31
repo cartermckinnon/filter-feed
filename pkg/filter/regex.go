@@ -24,11 +24,11 @@ func (f *regexFilter) GetSpec() *api.FilterSpec {
 	return f.spec
 }
 
-func getTargetValue(target api.FilterTarget, item *gofeed.Item) string {
+func getTargetValue(target api.FilterSpec_FilterTarget, item *gofeed.Item) string {
 	switch target {
-	case api.FilterTarget_TITLE:
+	case api.FilterSpec_TITLE:
 		return item.Title
-	case api.FilterTarget_DESCRIPTION:
+	case api.FilterSpec_DESCRIPTION:
 		return item.Description
 	}
 	return ""

@@ -9,28 +9,33 @@ message FilterSpecs {
 }
 
 message FilterSpec {
+  enum FilterType {
+    REGEX = 0;
+  }
   FilterType type = 1;
+
   string expression = 2;
+
+  enum FilterTarget {
+    TITLE = 0;
+    DESCRIPTION = 1;
+  }
   FilterTarget target = 3;
+
+  enum FilterEffect {
+    INCLUDE = 0;
+    EXCLUDE = 1;
+  }
   FilterEffect effect = 4;
 }
 
-enum FilterEffect {
-  INCLUDE = 0;
-  EXCLUDE = 1;
-}
-
-enum FilterType {
-  REGEX = 0;
-}
-
-enum FilterTarget {
-  TITLE = 0;
-  DESCRIPTION = 1;
-}
-
 message OverrideSpec {
-  string target = 1;
+  enum OverrideTarget {
+    TITLE = 0;
+    SUBTITLE = 1;
+    DESCRIPTION = 2;
+  }  
+  OverrideTarget target = 1;
   string value = 2;
 }
 

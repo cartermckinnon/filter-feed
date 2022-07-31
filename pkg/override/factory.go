@@ -1,26 +1,16 @@
 package override
 
 import (
-	"errors"
 	"fmt"
-	"strings"
 
 	api "github.com/cartermckinnon/filter-feed/pkg/api/v1"
 )
 
 func buildOverride(spec *api.OverrideSpec) (Override, error) {
-	target := strings.ToLower(spec.Target)
-	if strings.HasPrefix(target, "metadata.") {
-		return &metadataOverride{
-			spec: spec,
-		}, nil
-	}
-	return nil, ErrUnknownOverrideTarget
+	return &overrideImpl{
+		spec: spec,
+	}, nil
 }
-
-var (
-	ErrUnknownOverrideTarget = errors.New("unknown override target")
-)
 
 func buildOverrides(specs []*api.OverrideSpec) ([]Override, error) {
 	overrides := make([]Override, len(specs))

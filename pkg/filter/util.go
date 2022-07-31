@@ -7,14 +7,14 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
-func shouldInclude(matches bool, effect api.FilterEffect) bool {
+func shouldInclude(matches bool, effect api.FilterSpec_FilterEffect) bool {
 	switch effect {
-	case api.FilterEffect_INCLUDE:
+	case api.FilterSpec_INCLUDE:
 		return matches
-	case api.FilterEffect_EXCLUDE:
+	case api.FilterSpec_EXCLUDE:
 		return !matches
 	default:
-		log.Printf("unknown filterEffect=%d, known=%v", effect, api.FilterEffect_name)
+		log.Printf("unknown filterEffect=%d, known=%v", effect, api.FilterSpec_FilterEffect_name)
 		return true
 	}
 }

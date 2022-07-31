@@ -10,7 +10,7 @@ import (
 
 func buildFilter(spec *api.FilterSpec) (Filter, error) {
 	switch spec.Type {
-	case api.FilterType_REGEX:
+	case api.FilterSpec_REGEX:
 		regex, err := regexp.Compile(spec.Expression)
 		if err != nil {
 			return nil, err
@@ -20,11 +20,11 @@ func buildFilter(spec *api.FilterSpec) (Filter, error) {
 			spec:  spec,
 		}, nil
 	}
-	return nil, ErrUnknownFilterType
+	return nil, ErrUnimplementedFilterType
 }
 
 var (
-	ErrUnknownFilterType = errors.New("unknown filter type")
+	ErrUnimplementedFilterType = errors.New("unimplemented filter type")
 )
 
 func buildFilters(specs []*api.FilterSpec) ([]Filter, error) {

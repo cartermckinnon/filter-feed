@@ -1,159 +1,7 @@
-const { FetchFeedRequest, FilterTarget, FilterType, FilterEffect, FilterSpec } = require('./api/v1_pb.js');
-const { Materialize } = require('./materialize.min.js');
+const { FilterSpec } = require('./api/v1_pb.js');
+const { getKeyForValue } = require('./util.js');
 
-export class URLCard {
-    element;
-    request;
-    header;
-    filterTable;
-
-    constructor(url) {
-        let request = parseRequestFromURL(url);
-        if (request == null) {
-            request = new FetchFeedRequest();
-            request.setFeedurl(url);
-        }
-        this.request = request;
-
-        let div = document.createElement('div');
-        this.element = div;
-        div.classList.add('card');
-
-        let header = new URLCardHeader(request.getFeedurl(), "-");
-        this.header = header;
-        header.setFilteredURL(createFilteredURL(request));
-        div.appendChild(header.getElement());
-
-        div.appendChild(this.createFilterSection(request));
-
-        // this is a ridiculous hack to get the <select>-s rendered properly by Materialize
-        setTimeout(() => {
-            M.FormSelect.init(document.querySelectorAll('select'));
-        }, 100);
-    }
-
-    onRequestChange(request) {
-        this.request = request;
-        this.header.setFilteredURL(createFilteredURL(request));
-    }
-
-    createFilterSection(request) {
-        let div = document.createElement('div');
-        div.classList.add('card-content');
-        div.classList.add('card-row');
-
-        let filterHeader = document.createElement('h5');
-        filterHeader.innerText = "Filters";
-        div.appendChild(filterHeader);
-
-        let filterTable = new FilterTable(request);
-        this.filterTable = filterTable;
-        filterTable.setRequestChangeCallback((request) => this.onRequestChange(request));
-        div.appendChild(filterTable.getElement());
-
-        return div;
-    }
-}
-
-const FETCH_FEED_PATH = "/v1/ff/";
-
-function createFilteredURL(request) {
-    if (request.getFiltersList().length == 0) {
-        return "-";
-    }
-    let bytes = request.serializeBinary();
-    let b64 = toBase64(bytes);
-    let host = window.location.host;
-    if (window.location.hostname !== "localhost") {
-        host = "api." + host;
-    }
-    return location.protocol + "//" + host + FETCH_FEED_PATH + b64;
-}
-
-function toBase64(dataArr) {
-    return btoa(dataArr.reduce((data, val) => {
-        return data + String.fromCharCode(val);
-    }, ''));
-}
-
-function base64StringToUint8Array(base64String) {
-    let binaryString = atob(base64String);
-    let len = binaryString.length;
-    let bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
-    return bytes.buffer;
-}
-
-function parseRequestFromURL(urlString) {
-    let url = new URL(urlString);
-    if (url.hostname.endsWith(window.location.hostname)) {
-        let b64 = url.pathname.substring(FETCH_FEED_PATH.length);
-        let bytes = base64StringToUint8Array(b64);
-        let request = FetchFeedRequest.deserializeBinary(bytes);
-        return request;
-    }
-    return null;
-}
-
-function getKeyForValue(obj, value) {
-    return Object.keys(obj).find(key => obj[key] === value);
-}
-
-class URLCardHeader {
-    element;
-    filteredURLSpan;
-
-    constructor(sourceUrl, filteredURL) {
-        let row = document.createElement('div');
-        row.classList.add('row');
-
-        let sourceURLCol = document.createElement('div');
-        sourceURLCol.classList.add('col');
-        sourceURLCol.classList.add('s12');
-        sourceURLCol.classList.add('m6');
-        sourceURLCol.classList.add('l4');
-        let sourceURLLabel = document.createElement('label');
-        sourceURLLabel.innerText = "Source URL";
-        sourceURLCol.appendChild(sourceURLLabel);
-        let sourceURLSpan = document.createElement('span');
-        sourceURLSpan.innerText = sourceUrl;
-        sourceURLSpan.classList.add('code-text');
-        sourceURLCol.appendChild(sourceURLSpan);
-        row.appendChild(sourceURLCol);
-
-        let filteredURLCol = document.createElement('div');
-        filteredURLCol.classList.add('col');
-        filteredURLCol.classList.add('s12');
-        filteredURLCol.classList.add('m6');
-        filteredURLCol.classList.add('l8');
-        let filteredURLLabel = document.createElement('label');
-        filteredURLLabel.innerText = "Filtered URL";
-        filteredURLCol.appendChild(filteredURLLabel);
-        let filteredURLSpan = document.createElement('span');
-        this.filteredURLSpan = filteredURLSpan;
-        filteredURLSpan.innerText = filteredURL;
-        filteredURLSpan.classList.add('code-text');
-        filteredURLCol.appendChild(filteredURLSpan);
-        row.appendChild(filteredURLCol);
-
-        let head = document.createElement('div');
-        head.classList.add('card-content');
-        head.appendChild(row);
-        this.element = head;
-    }
-
-    setFilteredURL(url) {
-        this.filteredURLSpan.innerText = url;
-    }
-
-    getElement() {
-        return this.element;
-    }
-}
-
-class FilterTable {
+export class FilterTable {
     table;
     footer;
     request;
@@ -249,15 +97,15 @@ class FilterRow {
         tr.classList.add('filter-row');
 
         let targetCol = document.createElement('td');
-        targetCol.innerText = getKeyForValue(FilterTarget, spec.getTarget());
+        targetCol.innerText = getKeyForValue(FilterSpec.FilterTarget, spec.getTarget());
         tr.appendChild(targetCol);
 
         let effectCol = document.createElement('td');
-        effectCol.innerText = getKeyForValue(FilterEffect, spec.getEffect());
+        effectCol.innerText = getKeyForValue(FilterSpec.FilterEffect, spec.getEffect());
         tr.appendChild(effectCol);
 
         let typeCol = document.createElement('td');
-        let type = getKeyForValue(FilterType, spec.getType());
+        let type = getKeyForValue(FilterSpec.FilterType, spec.getType());
         typeCol.innerText = type;
         tr.appendChild(typeCol);
 
@@ -312,9 +160,9 @@ class FilterTableFooter {
         this.tableRow = tr;
         tr.classList.add('table-footer-row');
 
-        let targetSelectCol = this.createSelectColumn('Target', FilterTarget);
-        let effectSelectCol = this.createSelectColumn('Effect', FilterEffect);
-        let typeSelectCol = this.createSelectColumn('Type', FilterType);
+        let targetSelectCol = this.createSelectColumn('Target', FilterSpec.FilterTarget);
+        let effectSelectCol = this.createSelectColumn('Effect', FilterSpec.FilterEffect);
+        let typeSelectCol = this.createSelectColumn('Type', FilterSpec.FilterType);
         let expressionInput = this.createInputColumn('Expression', 'text');
 
         tr.appendChild(targetSelectCol);
@@ -346,10 +194,6 @@ class FilterTableFooter {
         this.addButton.onclick = callback;
     }
 
-    createFilterTableFooter() {
-        addButton.onclick = () => this.addFilter(this.filterInputs);
-    }
-
     prependSibling(element) {
         this.tableRow.parentElement.insertBefore(element, this.tableRow);
     }
@@ -372,9 +216,9 @@ class FilterTableFooter {
         let expression = this.inputs["expression"].value;
 
         let spec = new FilterSpec();
-        spec.setTarget(FilterTarget[target]);
-        spec.setEffect(FilterEffect[effect]);
-        spec.setType(FilterType[type]);
+        spec.setTarget(FilterSpec.FilterTarget[target]);
+        spec.setEffect(FilterSpec.FilterEffect[effect]);
+        spec.setType(FilterSpec.FilterType[type]);
         spec.setExpression(expression);
 
         return new FilterRow(spec);

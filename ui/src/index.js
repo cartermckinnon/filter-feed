@@ -1,6 +1,6 @@
 const { FetchFeedRequest, FilterType, FilterTarget, FilterEffect } = require('./api/v1_pb.js');
 const { Materialize } = require('./materialize.min.js');
-const { URLCard } = require('./url_card.js');
+const { URLCard } = require('./urlCard.js');
 const regexColorizer = require('regex-colorizer');
 
 var feedURLInput = null;

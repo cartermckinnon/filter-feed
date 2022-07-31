@@ -1,8 +1,9 @@
+VERSION 0.5
 ARG IMAGE_REPO="ghcr.io/cartermckinnon"
 
 proto-builder:
     # toolchain last updated: April 16, 2022.
-    FROM ubuntu:21.04
+    FROM ubuntu:22.04
     # Get rid of the warning: "debconf: unable to initialize frontend: Dialog"
     # https://github.com/moby/moby/issues/27988
     RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
