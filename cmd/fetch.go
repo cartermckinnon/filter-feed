@@ -53,7 +53,7 @@ func (c *fetchCommand) Run() error {
 
 	log.Printf("fetched feedType=%s feedURL=%s ", feed.FeedType, *c.feedUrl)
 
-	items, err := filter.FilterItems(*feed, filters)
+	items, err := filter.FilterItems(feed, filters)
 	if err != nil {
 		return fmt.Errorf("error filtering feedURL=%s %v", *c.feedUrl, err)
 	}
