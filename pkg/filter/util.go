@@ -19,7 +19,7 @@ func shouldInclude(matches bool, effect api.FilterSpec_FilterEffect) bool {
 	}
 }
 
-func FilterItems(feed gofeed.Feed, filterSpecs []*api.FilterSpec) ([]*gofeed.Item, error) {
+func FilterItems(feed *gofeed.Feed, filterSpecs []*api.FilterSpec) ([]*gofeed.Item, error) {
 	filters, err := buildFilters(filterSpecs)
 	if err != nil {
 		return nil, err

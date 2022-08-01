@@ -53,7 +53,7 @@ func (h *filterFeedV1Handler) filterFeedV1(w http.ResponseWriter, req *http.Requ
 
 	log.Printf("fetched feedType=%s feedURL=%s ", feed.FeedType, ffr.FeedURL)
 
-	items, err := filter.FilterItems(*feed, ffr.Filters)
+	items, err := filter.FilterItems(feed, ffr.Filters)
 	if err != nil {
 		log.Printf("error filtering feedURL=%s %v", ffr.FeedURL, err)
 		w.WriteHeader(http.StatusInternalServerError)
