@@ -22,6 +22,16 @@ export class URLCard {
         this.element = div;
         div.classList.add('card');
 
+        let titleRow = document.createElement('div');
+        titleRow.classList.add('card-content');
+        titleRow.classList.add('card-row');
+        titleRow.style = 'margin-bottom: 0;';
+        let title = document.createElement('h4');
+        title.style = 'margin: 0; color: gray;';
+        title.innerText = "Manage your feed";
+        titleRow.appendChild(title);
+        div.appendChild(titleRow);
+
         let header = new URLCardHeader(request.getFeedurl(), "-");
         this.header = header;
         header.setFilteredURL(createFilteredURL(request));
@@ -30,17 +40,21 @@ export class URLCard {
         let filterTable = new FilterTable(request);
         this.filterTable = filterTable;
         filterTable.setRequestChangeCallback((request) => this.onRequestChange(request));
-        div.appendChild(this.createSection('Filters', filterTable.getElement()));
+        div.appendChild(this.createSection('Filters', 'Decide which items appear in the feed.', filterTable.getElement()));
 
         let overrideTable = new OverrideTable(request);
         this.overrideTable = overrideTable;
         overrideTable.setRequestChangeCallback((request) => this.onRequestChange(request));
-        div.appendChild(this.createSection('Overrides', overrideTable.getElement()));        
+        div.appendChild(this.createSection('Overrides', 'Change how the feed appears in your reader.', overrideTable.getElement()));        
 
         // this is a ridiculous hack to get the <select>-s rendered properly by Materialize
         setTimeout(() => {
             M.FormSelect.init(document.querySelectorAll('select'));
         }, 100);
+        // this is a ridiculous hack to get the tooltip-s rendered properly by Materialize
+        setTimeout(() => {
+            M.Tooltip.init(document.querySelectorAll('.tooltipped'));
+        }, 100);        
     }
 
     onRequestChange(request) {
@@ -48,12 +62,23 @@ export class URLCard {
         this.header.setFilteredURL(createFilteredURL(request));
     }
 
-    createSection(headerText, element) {
+    createSection(headerText, tooltipText, element) {
         let div = document.createElement('div');
         div.classList.add('card-content');
         div.classList.add('card-row');
         let header = document.createElement('h5');
+        header.style = 'margin-top: 0';
         header.innerText = headerText;
+        let tooltip = document.createElement('a');
+        tooltip.classList.add('btn-flat');
+        tooltip.classList.add('tooltipped');
+        tooltip.setAttribute('data-tooltip', tooltipText);
+        tooltip.setAttribute('data-position', 'right');
+        let tooltipIcon = document.createElement('i');
+        tooltipIcon.classList.add('material-icons');
+        tooltipIcon.innerText = 'info';
+        tooltip.appendChild(tooltipIcon);
+        header.appendChild(tooltip);
         div.appendChild(header);
         div.appendChild(element);
         return div;
@@ -109,6 +134,7 @@ class URLCardHeader {
     constructor(sourceUrl, filteredURL) {
         let row = document.createElement('div');
         row.classList.add('row');
+        row.style = 'margin-bottom: 0;';
 
         let sourceURLCol = document.createElement('div');
         sourceURLCol.classList.add('col');
@@ -141,6 +167,7 @@ class URLCardHeader {
 
         let head = document.createElement('div');
         head.classList.add('card-content');
+        head.classList.add('card-row');
         head.appendChild(row);
         this.element = head;
     }
