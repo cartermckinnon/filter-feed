@@ -25,12 +25,17 @@ func FilterItems(feed gofeed.Feed, filterSpecs []*api.FilterSpec) ([]*gofeed.Ite
 		return nil, err
 	}
 	var items []*gofeed.Item
+	var include bool
 	for _, item := range feed.Items {
+		include = true
 		for _, filter := range filters {
-			if shouldInclude(filter.Matches(item), filter.GetSpec().Effect) {
-				items = append(items, item)
+			include = shouldInclude(filter.Matches(item), filter.GetSpec().Effect)
+			if !include {
 				break
 			}
+		}
+		if include {
+			items = append(items, item)
 		}
 	}
 	return items, nil
