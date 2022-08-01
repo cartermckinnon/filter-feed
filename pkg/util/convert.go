@@ -27,10 +27,10 @@ func convertToGorillaFeed(feed *gofeed.Feed) *feeds.Feed {
 		Description: feed.Description,
 	}
 	if feed.Author != nil {
-		author := feeds.Author{}
-		author.Name = feed.Author.Name
-		author.Email = feed.Author.Email
-		gfeed.Author = &author
+		gfeed.Author = &feeds.Author{
+			Name:  feed.Author.Name,
+			Email: feed.Author.Email,
+		}
 	}
 	if feed.Image != nil {
 		gfeed.Image = &feeds.Image{

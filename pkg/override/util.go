@@ -6,13 +6,12 @@ import (
 )
 
 func ApplyOverrides(feed *gofeed.Feed, specs []*api.OverrideSpec) error {
-	modified := false
 	for _, spec := range specs {
 		o, err := buildOverride(spec)
 		if err != nil {
 			return err
 		}
-		modified = modified || o.Apply(feed)
+		o.Apply(feed)
 	}
 	return nil
 }
