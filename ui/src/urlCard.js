@@ -27,7 +27,7 @@ export class URLCard {
         titleRow.classList.add('card-row');
         titleRow.style = 'margin-bottom: 0;';
         let title = document.createElement('h4');
-        title.style = 'margin: 0; color: gray;';
+        title.style = 'margin: 0';
         title.innerText = "Manage your feed";
         titleRow.appendChild(title);
         div.appendChild(titleRow);
@@ -73,7 +73,7 @@ export class URLCard {
         tooltip.classList.add('btn-flat');
         tooltip.classList.add('tooltipped');
         tooltip.setAttribute('data-tooltip', tooltipText);
-        tooltip.setAttribute('data-position', 'right');
+        tooltip.setAttribute('data-position', 'top');
         let tooltipIcon = document.createElement('i');
         tooltipIcon.classList.add('material-icons');
         tooltipIcon.innerText = 'info';
